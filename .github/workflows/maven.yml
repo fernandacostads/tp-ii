@@ -28,5 +28,13 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven
-      run: mvn clean verify
-
+      run: mvn clean verify package site jacoco:report pitest:mutationCoverage
+    - name: Creating directory
+      run: |
+        mkdir staging
+        cp -r target/* staging/
+    - name: Uploading test staging
+      uses: actions/upload-artifact@v3
+      with:
+        name: Package
+        path: staging
